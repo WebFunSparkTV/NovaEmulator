@@ -18,7 +18,20 @@ class Chip8 {
         const fontSet = [
             0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
             0x20, 0x60, 0x20, 0x20, 0x70, // 1
-            // ... remaining font set bytes
+            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+            0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+            0xF0, 0x80, 0xF0, 0x80, 0x80  // F
         ];
         for (let i = 0; i < fontSet.length; i++) {
             this.memory[i] = fontSet[i];
@@ -44,13 +57,17 @@ class Chip8 {
                         this.pc = this.stack.pop();
                         this.pc += 2;
                         break;
+                    default:
+                        console.log('Unknown opcode: ' + opcode.toString(16));
                 }
                 break;
             case 0xA000: // LD I, addr
                 this.i = opcode & 0x0FFF;
                 this.pc += 2;
                 break;
-            // ... handle other opcodes
+            // Add more opcodes as needed
+            default:
+                console.log('Unknown opcode: ' + opcode.toString(16));
         }
     }
 
@@ -73,7 +90,15 @@ class Chip8 {
 }
 
 let chip8 = new Chip8();
-let program = [/* ... CHIP-8 program bytes ... */];
+let program = [
+    // Simple CHIP-8 program bytes
+    0x00, 0xE0, // CLS
+    0xA2, 0x2A, // LD I, 0x22A
+    0x60, 0x0C, // LD V0, 0x0C
+    0x61, 0x08, // LD V1, 0x08
+    0xD0, 0x11, // DRW V0, V1, 1
+    0x12, 0x00  // JP 0x200
+];
 chip8.loadProgram(program);
 
 function loop() {
